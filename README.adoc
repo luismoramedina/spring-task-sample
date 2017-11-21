@@ -1,0 +1,45 @@
+= Simple task app
+
+= Run
+
+You can use this app like a simple java application. No Dataflow needed. You can run the software
+with a cron, a task manager, rundeck or something like that.
+
+Follow these instructions:
+
+----
+mvn clean package
+----
+
+Run in parameters mode:
+
+----
+java -Dsleep=1 -jar target/*.jar
+----
+
+Run in env mode:
+
+----
+export SLEEP=100
+java -jar target/*.jar
+----
+
+= Tasks and flows
+
+These instructions are for spring Data flow environment.
+
+mvn clean install
+
+wget http://repo.spring.io/release/org/springframework/cloud/spring-cloud-dataflow-server-local/1.1.2.RELEASE/spring-cloud-dataflow-server-local-1.1.2.RELEASE.jar
+java -jar spring-cloud-dataflow-server-local-1.1.2.RELEASE.jar
+
+wget http://repo.spring.io/release/org/springframework/cloud/spring-cloud-dataflow-shell/1.1.2.RELEASE/spring-cloud-dataflow-shell-1.1.2.RELEASE.jar
+java -jar spring-cloud-dataflow-shell-1.1.2.RELEASE.jar
+
+localhost:9393/dashboard/
+
+app register --name hello --type task --uri maven://com.github.luismoramedina:hello-task:jar:0.0.1-SNAPSHOT
+task create --definition hello --name hello
+task launch --name hello
+
+stream create foo --definition "triggertask --triggertask.uri=maven://org.springframework.cloud.task.app:timestamp-task:jar:1.0.0.BUILD-SNAPSHOT --trigger.fixed-delay=5" --deploy
